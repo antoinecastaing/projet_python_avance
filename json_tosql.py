@@ -39,3 +39,14 @@ def to_sql(data):
 
     conn = sqlite3.connect('data.db')
     data.to_sql('meteo', conn, if_exists='replace', index = False)
+
+
+def main():
+    """
+    Main function to format the data and save it in a sqlite database
+    """
+    data = formatting()
+    to_sql(data)
+
+if __name__ == "__main__":
+    main()
