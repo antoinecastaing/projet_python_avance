@@ -21,6 +21,7 @@ def formatting():
     data = df[['numer_sta','date','ff','t','u']]
     data.loc[:,'date'] = pd.to_datetime(data['date'])
     data.columns = ['NUM_STATION', 'DATE', 'VITESSE_VENT', 'TEMPERATURE', 'HUMIDITE']
+    data["ANNEE"] = data["DATE"].dt.year
     return data
 
 def to_sql(data):
