@@ -7,7 +7,7 @@ def formatting():
     Parameters
     ---
     None
-    
+
     Returns
     ---
     pd.DataFrame
@@ -39,6 +39,3 @@ def to_sql(data):
 
     conn = sqlite3.connect('data.db')
     data.to_sql('meteo', conn, if_exists='replace', index = False)
-
-
-print(pd.read_sql('SELECT * FROM meteo', sqlite3.connect('data.db')))
