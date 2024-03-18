@@ -15,9 +15,20 @@ def get_data(date):
     pd.DataFrame
         The data from the website
     """
-    date = date.replace("-", "")[:6]
-    url = f"https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/Archive/synop.{date}.csv.gz"
-    data = pd.read_csv(url, compression='gzip', sep=";", header=None)
+    date = pd.to_datetime(date).strftime("%Y-%m-%d")
+    print(date)
+    date_list = pd.date_range(start="1996-01-01", end=date, freq = "ME").strftime("%Y-%m-%d").tolist()
+    df = pd.DataFrame()
+    for date in date_list:
+        print(date)
+        date = date.replace("-", "")[:6]
+        url = f"https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/Archive/synop.{date}.csv.gz"
+        data = pd.read_csv(url, compression='gzip', sep=";", header=None)
+        df = pd.concat([df, data])
+    df.reset_index(inplace=True)
+    df.columns = df.iloc[0]
+    df = df[1:]
+    data = df[['numer_sta','date','ff','t','u']]
     return data
 
 def to_json(data):
@@ -42,10 +53,9 @@ def main():
     Main function to get the data from the meteo france website and transform it into a json file
     """
     today = pd.to_datetime("today").strftime("%Y-%m-%d")
-    date_list = pd.date_range(start="1996-01-01", end=today, freq = "M").strftime("%Y-%m-%d").tolist()
-    for date in date_list:
-        print(date)
-        to_json(get_data(date))
+    data = get_data(today)
+    to_json(data)
+
 
 if __name__ == "__main__":
     main()

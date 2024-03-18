@@ -13,7 +13,7 @@ def formatting():
     pd.DataFrame
         The formatted data
     """
-    df = pd.read_json('data.json', )
+    df = pd.read_json('data.json')
     df.columns = df.iloc[0]
     df = df[1:]
     df.drop(df[df['t'] == 'mq'].index, inplace = True)
@@ -21,7 +21,7 @@ def formatting():
     data = df[['numer_sta','date','ff','t','u']]
     data.loc[:,'date'] = pd.to_datetime(data['date'])
     data.columns = ['NUM_STATION', 'DATE', 'VITESSE_VENT', 'TEMPERATURE', 'HUMIDITE']
-    data["ANNEE"] = data["DATE"].dt.year
+    data["ANNEE"] = pd.DatetimeIndex(data["DATE"]).year
     return data
 
 def to_sql(data):
