@@ -1,5 +1,4 @@
 import pandas as pd
-import sqlite3
 
 def formatting():
     """
@@ -14,9 +13,9 @@ def formatting():
         The formatted data
     """
     df = pd.read_json('data.json')
-    df.columns = df.iloc[0]
-    df = df[1:]
+    print(df.head())
     df.drop(df[df['t'] == 'mq'].index, inplace = True)
+    df.drop(df[df['t']=='t'].index, inplace = True)
     df['t'] = df['t'].astype(float) - 273.15
     data = df[['numer_sta','date','ff','t','u']]
     data.loc[:,'date'] = pd.to_datetime(data['date'])
@@ -38,8 +37,7 @@ def to_sql(data):
     None
     """
 
-    conn = sqlite3.connect('data.db')
-    data.to_sql('meteo', conn, if_exists='replace', index = False)
+    data.to_sql('meteo', 'sqlite:///data.db', if_exists='replace')
 
 
 def main():
