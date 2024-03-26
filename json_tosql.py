@@ -21,6 +21,8 @@ def formatting():
     data.loc[:,'date'] = pd.to_datetime(data['date'])
     data.columns = ['NUM_STATION', 'DATE', 'VITESSE_VENT', 'TEMPERATURE', 'HUMIDITE']
     data["ANNEE"] = pd.DatetimeIndex(data["DATE"]).year
+    data["MOIS"] = pd.DatetimeIndex(data["DATE"]).month
+    data["JOUR"] = pd.DatetimeIndex(data["DATE"]).day
     return data
 
 def to_sql(data):
